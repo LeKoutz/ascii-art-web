@@ -50,7 +50,7 @@ func (a *AsciiHandler) HandleHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Execute the home template
-	template.Execute(w, nil)
+	err = template.Execute(w, nil)
 	if err != nil {
 		a.HandleErrors(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		return
