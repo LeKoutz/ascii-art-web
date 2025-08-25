@@ -80,9 +80,12 @@ func (a *AsciiHandler) HandleAsciiArt(w http.ResponseWriter, r *http.Request) {
 		a.HandleErrors(w, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 		return
 	}
-	// ===========================================
-	// We should add a ValidateInput function here
-	// ===========================================
+
+	// Validate input
+	if err := a.service.ValidateInput(text, banner); err != nil {
+		a.HandleErrors(w, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+		return
+	}
 
 	// Generate ASCII art
 	asciiArt, err := a.service.Generate(text, banner)
