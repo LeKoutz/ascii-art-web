@@ -10,6 +10,19 @@ type AsciiHandler struct {
 	service *services.AsciiArtWeb
 }
 
+// PageData is used for passing data to the html file templates
+type PageData struct {
+	InputText   string
+	InputBanner string
+	AsciiArt    string
+}
+
+// ErrorData is used for passing data to the html file error templates
+type ErrorData struct {
+	StatusCode int
+	Message    string
+}
+
 // NewAsciiHandler initializes a new AsciiHandler instance to be used by each request
 func NewAsciiHandler(service *services.AsciiArtWeb) *AsciiHandler {
 	return &AsciiHandler{
