@@ -42,3 +42,41 @@ func (a *AsciiHandler) HandleHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// HandleAsciiArt processes form submissions and returns ASCII art
+func (a *AsciiHandler) HandleAsciiArt(w http.ResponseWriter, r *http.Request) {
+	// Only allow POST requests
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	// Parse the form data
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+	// Get the text and banner style from the form
+	text := r.FormValue("text")
+	if text == "" {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+	banner := r.FormValue("banner")
+	if banner == "" {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+	// ===========================================
+	// We should add a ValidateInput function here
+	// ===========================================
+
+	// Generate ASCII art
+	asciiArt, err := a.service.Generate(text, banner)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	// Return the ASCII art
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.Write([]byte(asciiArt))
+}
