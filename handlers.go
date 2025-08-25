@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"ascii-art-web/services"
+	"fmt"
 	"html/template"
 	"net/http"
 )
@@ -34,24 +35,24 @@ func NewAsciiHandler(service *services.AsciiArtWeb) *AsciiHandler {
 func (a *AsciiHandler) HandleHome(w http.ResponseWriter, r *http.Request) {
 	// Only allow GET requests
 	if r.Method != http.MethodGet {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		a.HandleErrors(w, http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed))
 		return
 	}
 	// Check if we are at the root path
 	if r.URL.Path != "/" {
-		http.NotFound(w, r)
+		a.HandleErrors(w, http.StatusNotFound, http.StatusText(http.StatusNotFound))
 		return
 	}
 	// Parse the home template
 	template, err := template.ParseFiles("templates/index.html")
 	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		a.HandleErrors(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		return
 	}
 	// Execute the home template
 	template.Execute(w, nil)
 	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		a.HandleErrors(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		return
 	}
 }
@@ -60,23 +61,23 @@ func (a *AsciiHandler) HandleHome(w http.ResponseWriter, r *http.Request) {
 func (a *AsciiHandler) HandleAsciiArt(w http.ResponseWriter, r *http.Request) {
 	// Only allow POST requests
 	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		a.HandleErrors(w, http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed))
 		return
 	}
 	// Parse the form data
 	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Bad Request", http.StatusBadRequest)
+		a.HandleErrors(w, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 		return
 	}
 	// Get the text and banner style from the form
 	text := r.FormValue("text")
 	if text == "" {
-		http.Error(w, "Bad Request", http.StatusBadRequest)
+		a.HandleErrors(w, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 		return
 	}
 	banner := r.FormValue("banner")
 	if banner == "" {
-		http.Error(w, "Bad Request", http.StatusBadRequest)
+		a.HandleErrors(w, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 		return
 	}
 	// ===========================================
@@ -86,10 +87,35 @@ func (a *AsciiHandler) HandleAsciiArt(w http.ResponseWriter, r *http.Request) {
 	// Generate ASCII art
 	asciiArt, err := a.service.Generate(text, banner)
 	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		a.HandleErrors(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		return
 	}
-	// Return the ASCII art
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.Write([]byte(asciiArt))
+	// Parse the home template
+	template, err := template.ParseFiles("templates/index.html")
+	if err != nil {
+		a.HandleErrors(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+		return
+	}
+	// Execute the home template
+	err = template.Execute(w, PageData{InputText: text, InputBanner: banner, AsciiArt: asciiArt})
+	if err != nil {
+		a.HandleErrors(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+		return
+	}
+}
+
+// HandleErrors serves error pages based on status codes
+func (a *AsciiHandler) HandleErrors(w http.ResponseWriter, statusCode int, message string) {
+	// Parse the error template
+	template, err := template.ParseFiles("templates/error.html")
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error %d: %s", statusCode, http.StatusText(statusCode)), statusCode)
+		return
+	}
+	// Execute the error template
+	err = template.Execute(w, ErrorData{StatusCode: statusCode, Message: message})
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error %d: %s", statusCode, http.StatusText(statusCode)), statusCode)
+		return
+	}
 }
