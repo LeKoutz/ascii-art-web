@@ -47,7 +47,7 @@ func (a *AsciiArtWeb) LoadBanners() error {
 
 		for scanner.Scan() {
 			line := scanner.Text()
-			
+
 			if line == "" && len(lines) > 0 {
 				// Save completed character
 				if len(lines) == charHeight {
@@ -57,7 +57,7 @@ func (a *AsciiArtWeb) LoadBanners() error {
 				lines = []string{}
 				continue
 			}
-			
+
 			if line != "" {
 				lines = append(lines, line)
 			}
@@ -129,4 +129,37 @@ func (a *AsciiArtWeb) GetAvailableBanners() []string {
 		banners = append(banners, name)
 	}
 	return banners
+}
+
+// ValidateInput checks if the input text and banner are valid
+func (a *AsciiArtWeb) ValidateInput(text, banner string) error {
+	// Check for empty input
+	if text == "" {
+		return fmt.Errorf("text input cannot be empty")
+	}
+
+	// Check for empty banner
+	if banner == "" {
+		return fmt.Errorf("banner style must be specified")
+	}
+
+	// Check for valid banner name
+	banners := a.GetAvailableBanners()
+	if !strings.Contains(strings.Join(banners, ","), banner) {
+		return fmt.Errorf("invalid banner style: %s", banner)
+	}
+
+	// Check for non-ASCII characters
+	for _, r := range text {
+		if (r < 32 || r > 126) && r != '\n' && r != '\r' && r != '\t' {
+			return fmt.Errorf("invalid character in input: only ASCII printable characters are allowed")
+		}
+	}
+
+	// Check input length (max 100 characters)
+	if len(text) > 100 {
+		return fmt.Errorf("input text too long: maximum length is 100 characters")
+	}
+
+	return nil
 }
