@@ -151,7 +151,7 @@ func (a *AsciiArtWeb) ValidateInput(text, banner string) error {
 
 	// Check for non-ASCII characters
 	for _, r := range text {
-		if r < 32 || r > 126 {
+		if (r < 32 || r > 126) && r != '\n' && r != '\r' && r != '\t' {
 			return fmt.Errorf("invalid character in input: only ASCII printable characters are allowed")
 		}
 	}
