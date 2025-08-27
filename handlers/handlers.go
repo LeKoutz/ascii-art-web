@@ -115,6 +115,8 @@ func (a *AsciiHandler) HandleErrors(w http.ResponseWriter, statusCode int, messa
 		http.Error(w, fmt.Sprintf("Error %d: %s", statusCode, http.StatusText(statusCode)), statusCode)
 		return
 	}
+	// Set status code before writing any response
+	w.WriteHeader(statusCode)
 	// Execute the error template
 	err = template.Execute(w, ErrorData{StatusCode: statusCode, Message: message})
 	if err != nil {
