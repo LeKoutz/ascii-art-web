@@ -156,8 +156,8 @@ func (a *AsciiArtWeb) ValidateInput(text, banner string) error {
 		}
 	}
 
-	// Check input length (optional)
-	if len(text) > 100 { // adjust limit as needed
+	// Check input length (max 100 characters)
+	if len(text) > 100 {
 		return fmt.Errorf("input text too long: maximum length is 100 characters")
 	}
 
