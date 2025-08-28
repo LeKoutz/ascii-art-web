@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>ASCII Art</title>
+    <style>
+        body {
+            background: #000000;
+            color: #ffffff;
+            font-family: monospace;
+            margin: 16px;
+        }
+
+        h1 {
+            color: #9969FF;
+        }
+
+        label {
+            margin: 8px 8px 4px 0;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+        }
+
+        button {
+            background: #007BFF;
+            color: #ffffff;
+            border: none;
+            padding: 8px 12px;
+        }
+
+        pre.result {
+            background: #111111;
+            color: #FF3355;
+            padding: 10px;
+            white-space: pre;
+            overflow: auto;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        /* Banner + select on same line */
+        .center {
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        /* Center the Generate button on its own line */
+    </style>
+</head>
+
+<body>
+    <h1>ASCII Art</h1>
+
+    <form method="POST" action="/ascii-art">
+        <label for="text">Text</label>
+        <textarea id="text" name="text" maxlength="100">{{.InputText}}</textarea>
+
+        <div class="row">
+            <label for="banner">Banner</label>
+            <select id="banner" name="banner">
+                {{ $current := .InputBanner }}
+                {{ range .Banners }}
+                {{ $name := . }}
+                <option value="{{$name}}" {{if eq $name $current}}selected{{end}}>{{$name}}</option>
+                <!-- In HTML, an <option> is preselected when it has the boolean attribute selected inside its opening-->
+                {{ end }}
+            </select>
+        </div>
+
+        <div class="center">
+            <button type="submit">Generate</button>
+        </div>
+    </form>
+
+    {{if .AsciiArt}}
+    <h2 style="color:#FF3355;">Result</h2>
+    <pre class="result">{{.AsciiArt}}</pre>
+    {{end}}
+</body>
+
+</html>

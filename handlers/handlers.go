@@ -16,6 +16,7 @@ type PageData struct {
 	InputText   string
 	InputBanner string
 	AsciiArt    string
+	Banners     []string
 }
 
 // ErrorData is used for passing data to the html file error templates
@@ -44,14 +45,18 @@ func (a *AsciiHandler) HandleHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Parse the home template
-	template, err := template.ParseFiles("templates/index.html")
+	pageTemplate, err := template.ParseFiles("templates/index.html")
 	if err != nil {
 		a.HandleErrors(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		return
 	}
+	// Pass banners + default selection so the dropdown renders
+	data := PageData{
+		InputBanner: "standard",
+		Banners:     a.service.GetAvailableBanners(),
+	}
 	// Execute the home template
-	err = template.Execute(w, nil)
-	if err != nil {
+	if err := pageTemplate.Execute(w, data); err != nil {
 		a.HandleErrors(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		return
 	}
@@ -64,11 +69,13 @@ func (a *AsciiHandler) HandleAsciiArt(w http.ResponseWriter, r *http.Request) {
 		a.HandleErrors(w, http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed))
 		return
 	}
+
 	// Parse the form data
 	if err := r.ParseForm(); err != nil {
 		a.HandleErrors(w, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 		return
 	}
+
 	// Get the text and banner style from the form
 	text := r.FormValue("text")
 	if text == "" {
@@ -93,15 +100,22 @@ func (a *AsciiHandler) HandleAsciiArt(w http.ResponseWriter, r *http.Request) {
 		a.HandleErrors(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		return
 	}
+
 	// Parse the home template
-	template, err := template.ParseFiles("templates/index.html")
+	pageTemplate, err := template.ParseFiles("templates/index.html")
 	if err != nil {
 		a.HandleErrors(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		return
 	}
-	// Execute the home template
-	err = template.Execute(w, PageData{InputText: text, InputBanner: banner, AsciiArt: asciiArt})
-	if err != nil {
+
+	// Execute the home template with result and banners
+	data := PageData{
+		InputText:   text,
+		InputBanner: banner,
+		AsciiArt:    asciiArt,
+		Banners:     a.service.GetAvailableBanners(),
+	}
+	if err := pageTemplate.Execute(w, data); err != nil {
 		a.HandleErrors(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		return
 	}
@@ -109,17 +123,13 @@ func (a *AsciiHandler) HandleAsciiArt(w http.ResponseWriter, r *http.Request) {
 
 // HandleErrors serves error pages based on status codes
 func (a *AsciiHandler) HandleErrors(w http.ResponseWriter, statusCode int, message string) {
-	// Parse the error template
-	template, err := template.ParseFiles("templates/error.html")
+	errorTemplate, err := template.ParseFiles("templates/error.html")
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error %d: %s", statusCode, http.StatusText(statusCode)), statusCode)
 		return
 	}
-	// Set status code before writing any response
 	w.WriteHeader(statusCode)
-	// Execute the error template
-	err = template.Execute(w, ErrorData{StatusCode: statusCode, Message: message})
-	if err != nil {
+	if err := errorTemplate.Execute(w, ErrorData{StatusCode: statusCode, Message: message}); err != nil {
 		http.Error(w, fmt.Sprintf("Error %d: %s", statusCode, http.StatusText(statusCode)), statusCode)
 		return
 	}
