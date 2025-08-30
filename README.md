@@ -40,15 +40,13 @@ ascii-art-web/
 - Submit empty text
 - Submit text with non-ASCII characters
 - Submit text longer than 100 characters
-- Submit without selecting a banner
 
 ### 404 Not Found
 - Visit any URL other than `/` or `/ascii-art`
 - Example: `http://localhost:8080/nonexistent`
 
 ### 500 Internal Server Error
-- Delete or corrupt banner files in `/banners/` directory
-- Corrupt template files in `/templates/` directory
+- Delete or corrupt template files in `/templates/` directory
 
 ## Contributors
 
