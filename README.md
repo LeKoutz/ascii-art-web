@@ -4,8 +4,39 @@ A web application that converts text into ASCII art using different banner style
 
 ## How to Run
 
+### Local Development
 ```bash
 go run main.go
+```
+
+### Docker (Recommended)
+
+#### Using Docker Compose
+```bash
+docker-compose up --build
+```
+
+#### Using Docker Commands
+```bash
+# Build the image
+docker build -t ascii-art-web .
+
+# Run the container
+docker run -d -p 8080:8080 --name ascii-art-web-container ascii-art-web
+```
+
+#### Using Build Scripts
+**Windows:**
+```cmd
+docker-build.bat build
+docker-build.bat run
+```
+
+**Linux/Mac:**
+```bash
+chmod +x docker-build.sh
+./docker-build.sh build
+./docker-build.sh run
 ```
 
 The server will start on `http://localhost:8080`
@@ -47,6 +78,38 @@ ascii-art-web/
 
 ### 500 Internal Server Error
 - Delete or corrupt template files in `/templates/` directory
+
+## Docker
+
+This application is containerized using Docker with the following features:
+
+- **Multi-stage build** for optimized image size
+- **Non-root user** for security
+- **Health checks** for container monitoring
+- **Metadata labels** for better organization
+- **Alpine Linux** base for minimal footprint
+
+### Docker Commands
+
+```bash
+# Build image
+docker build -t ascii-art-web .
+
+# Run container
+docker run -d -p 8080:8080 --name ascii-art-web-container ascii-art-web
+
+# View logs
+docker logs ascii-art-web-container
+
+# Stop container
+docker stop ascii-art-web-container
+
+# Remove container
+docker rm ascii-art-web-container
+
+# Clean up unused Docker objects
+docker system prune -f
+```
 
 ## Contributors
 

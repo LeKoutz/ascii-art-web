@@ -1,0 +1,30 @@
+# Git files
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Test files
+*_test.go
+**/*_test.go
+
+# Development files
+.vscode
+.idea
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+
+# Docker files (avoid recursion)
+Dockerfile
+.dockerignore
+
+# License file (not needed in container)
+LICENSE

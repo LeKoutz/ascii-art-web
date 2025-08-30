@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  ascii-art-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ascii-art-web-container
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    labels:
+      - "com.ascii-art-web.description=ASCII Art Web Application"
+      - "com.ascii-art-web.version=1.0.0"
+      - "com.ascii-art-web.maintainer=ASCII Art Web Team"
+    environment:
+      - GO_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - ascii-art-network
+
+networks:
+  ascii-art-network:
+    driver: bridge
+    labels:
+      - "com.ascii-art-web.network=main"
