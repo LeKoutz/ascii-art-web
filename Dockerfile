@@ -42,5 +42,5 @@ COPY --from=builder /app/banners ./banners
 # Expose port
 EXPOSE 8080
 
-# Run the application
-CMD ["./main"]
+# Run the script
+ENTRYPOINT ["sh","/app/entry_point.sh"]
