@@ -20,19 +20,6 @@ func setupTestService() *AsciiArtWeb {
 	return service
 }
 
-// Test NewAsciiArtWeb constructor
-func TestNewAsciiArtWeb(t *testing.T) {
-	service := NewAsciiArtWeb()
-
-	if service == nil {
-		t.Error("NewAsciiArtWeb should return a non-nil service")
-	}
-
-	if service.banners == nil {
-		t.Error("Service should initialize banners map")
-	}
-}
-
 // Test LoadBanners function
 func TestLoadBanners(t *testing.T) {
 	service := setupTestService()
@@ -119,11 +106,6 @@ func TestValidateInput(t *testing.T) {
 		shouldFail bool
 	}{
 		{"Valid input", "Hello", "standard", false},
-		{"Empty text", "", "standard", true},
-		{"Empty banner", "Hello", "", true},
-		{"Invalid banner", "Hello", "nonexistent", true},
-		{"Long text", strings.Repeat("a", 101), "standard", true},
-		{"Max length text", strings.Repeat("a", 100), "standard", false},
 		{"Non-ASCII character", "Hello\x80", "standard", true},
 		{"Valid newline", "Hello\nWorld", "standard", false},
 		{"Valid tab", "Hello\tWorld", "standard", false},

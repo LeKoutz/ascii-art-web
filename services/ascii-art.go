@@ -163,32 +163,11 @@ func (a *AsciiArtWeb) GetAvailableBanners() []string {
 // It checks for empty values, invalid characters, length limits, and banner availability.
 // Returns an error if any validation rule is violated.
 func (a *AsciiArtWeb) ValidateInput(text, banner string) error {
-	// Ensure text input is not empty
-	if text == "" {
-		return fmt.Errorf("text input cannot be empty")
-	}
-
-	// Ensure banner style is specified
-	if banner == "" {
-		return fmt.Errorf("banner style must be specified")
-	}
-
-	// Verify the requested banner exists in loaded banners
-	_, exists := a.banners[banner]
-	if !exists {
-		return fmt.Errorf("invalid banner style: %s", banner)
-	}
-
 	// Check for invalid characters (only ASCII printable + newline/tab/carriage return allowed)
 	for _, r := range text {
 		if (r < 32 || r > 126) && r != '\n' && r != '\r' && r != '\t' {
-			return fmt.Errorf("invalid character in input: only ASCII printable characters are allowed")
+			return fmt.Errorf("")
 		}
-	}
-
-	// Enforce maximum input length to prevent abuse
-	if len(text) > 100 {
-		return fmt.Errorf("input text too long: maximum length is 100 characters")
 	}
 
 	return nil

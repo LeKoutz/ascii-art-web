@@ -1,10 +1,11 @@
 package main
 
 import (
-	"ascii-art-web/handlers"
-	"ascii-art-web/services"
 	"log"
 	"net/http"
+
+	"ascii-art-web/handlers"
+	"ascii-art-web/services"
 )
 
 // main initializes and starts the ASCII art web server.

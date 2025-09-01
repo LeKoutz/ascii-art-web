@@ -39,7 +39,6 @@ ascii-art-web/
 ### 400 Bad Request
 - Submit empty text
 - Submit text with non-ASCII characters
-- Submit text longer than 100 characters
 
 ### 404 Not Found
 - Visit any URL other than `/` or `/ascii-art`
