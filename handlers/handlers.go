@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"ascii-art-web/services"
 	"fmt"
 	"html/template"
 	"net/http"
+
+	"ascii-art-web/services"
 )
 
 // AsciiHandler handles HTTP requests for ASCII art generation.
@@ -98,10 +99,6 @@ func (a *AsciiHandler) HandleAsciiArt(w http.ResponseWriter, r *http.Request) {
 
 	// Extract banner selection from form data
 	banner := r.FormValue("banner")
-	if banner == "" {
-		a.HandleErrors(w, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
-		return
-	}
 
 	// Validate input using service layer validation rules
 	if err := a.service.ValidateInput(text, banner); err != nil {

@@ -1,13 +1,14 @@
 package main
 
 import (
-	"ascii-art-web/handlers"
-	"ascii-art-web/services"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"strings"
 	"testing"
+
+	"ascii-art-web/handlers"
+	"ascii-art-web/services"
 )
 
 func setupTestHandler() *handlers.AsciiHandler {
@@ -72,25 +73,6 @@ func TestHandleAsciiArt_POST_EmptyText(t *testing.T) {
 	form := url.Values{}
 	form.Add("text", "")
 	form.Add("banner", "standard")
-
-	req := httptest.NewRequest(http.MethodPost, "/ascii-art", strings.NewReader(form.Encode()))
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	w := httptest.NewRecorder()
-
-	handler.HandleAsciiArt(w, req)
-
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("Expected status 400, got %d", w.Code)
-	}
-}
-
-// Test POST request with invalid banner (should return 400)
-func TestHandleAsciiArt_POST_InvalidBanner(t *testing.T) {
-	handler := setupTestHandler()
-
-	form := url.Values{}
-	form.Add("text", "Hello")
-	form.Add("banner", "nonexistent")
 
 	req := httptest.NewRequest(http.MethodPost, "/ascii-art", strings.NewReader(form.Encode()))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")

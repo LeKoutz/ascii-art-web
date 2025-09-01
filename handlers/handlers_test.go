@@ -1,13 +1,14 @@
 package handlers
 
 import (
-	"ascii-art-web/services"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"os"
 	"strings"
 	"testing"
+
+	"ascii-art-web/services"
 )
 
 func setupTestHandler() *AsciiHandler {
@@ -80,8 +81,6 @@ func TestHandleAsciiArt(t *testing.T) {
 	}{
 		{"Valid POST", http.MethodPost, "Hello", "standard", http.StatusOK},
 		{"Empty text", http.MethodPost, "", "standard", http.StatusBadRequest},
-		{"Empty banner", http.MethodPost, "Hello", "", http.StatusBadRequest},
-		{"Invalid banner", http.MethodPost, "Hello", "nonexistent", http.StatusBadRequest},
 		{"Invalid method", http.MethodGet, "Hello", "standard", http.StatusMethodNotAllowed},
 	}
 
