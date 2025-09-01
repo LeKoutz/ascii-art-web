@@ -25,16 +25,8 @@ docker build -t ascii-art-web .
 docker run -d -p 8080:8080 --name ascii-art-web-container ascii-art-web
 ```
 
-#### Using Build Scripts
-**Windows:**
-```cmd
-docker-build.bat build
-docker-build.bat run
-```
-
 **Linux/Mac:**
 ```bash
-chmod +x docker-build.sh
 ./docker-build.sh build
 ./docker-build.sh run
 ```
