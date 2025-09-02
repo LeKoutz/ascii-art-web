@@ -9,29 +9,30 @@ A web application that converts text into ASCII art using different banner style
 go run main.go
 ```
 
-### Docker (Recommended)
+### Docker
 
-#### Using Docker Compose
+#### Quick Start
 ```bash
-docker-compose up --build
+# Build and run with the provided script (Linux/Mac)
+./docker-build.sh build
+./docker-build.sh run
 ```
 
-#### Using Docker Commands
+#### Manual Docker Commands
 ```bash
 # Build the image
 docker build -t ascii-art-web .
 
 # Run the container
 docker run -d -p 8080:8080 --name ascii-art-web-container ascii-art-web
-```
 
-**Linux/Mac:**
-```bash
-./docker-build.sh build
-./docker-build.sh run
-```
+# View logs
+docker logs ascii-art-web-container
 
-The server will start on `http://localhost:8080`
+# Stop and remove
+docker stop ascii-art-web-container
+docker rm ascii-art-web-container
+```
 
 ## Project Structure
 
@@ -75,22 +76,39 @@ ascii-art-web/
 This application is containerized using Docker with the following features:
 
 - **Multi-stage build** for optimized image size
-- **Non-root user** for security
-- **Health checks** for container monitoring
+- **Alpine Linux** base for minimal footprint (~15MB final image)
 - **Metadata labels** for better organization
-- **Alpine Linux** base for minimal footprint
+- **Port 8080** exposed for web access
 
-### Docker Commands
+### Docker Build Script (Recommended)
+
+The `docker-build.sh` script provides easy Docker management:
+
+```bash
+# Available commands:
+./docker-build.sh build   # Build the Docker image
+./docker-build.sh run     # Run the container (stops existing if running)
+./docker-build.sh stop    # Stop and remove container
+./docker-build.sh logs    # View container logs
+./docker-build.sh shell   # Open shell in running container
+./docker-build.sh clean   # Remove container and image completely
+```
+
+### Manual Docker Commands
 
 ```bash
 # Build image
 docker build -t ascii-art-web .
 
-# Run container
+# Run container (detached mode)
 docker run -d -p 8080:8080 --name ascii-art-web-container ascii-art-web
+
+# Run container (interactive mode to see logs)
+docker run -p 8080:8080 --name ascii-art-web-container ascii-art-web
 
 # View logs
 docker logs ascii-art-web-container
+docker logs -f ascii-art-web-container  # Follow logs
 
 # Stop container
 docker stop ascii-art-web-container
@@ -98,11 +116,30 @@ docker stop ascii-art-web-container
 # Remove container
 docker rm ascii-art-web-container
 
+# Remove image
+docker rmi ascii-art-web
+
 # Clean up unused Docker objects
 docker system prune -f
 ```
 
-## Contributors
+### Docker Troubleshooting
+
+**Port already in use:**
+```bash
+# Find what's using port 8080
+netstat -tulpn | grep 8080
+# Or use different port
+docker run -p 8081:8080 --name ascii-art-web-container ascii-art-web
+```
+
+**Container name conflict:**
+```bash
+# Remove existing container
+docker rm -f asci
+```
+
+# **Contributors:**
 
 - ### Constantine Ktistakis
 - ### Giorgos Koutzos

@@ -15,11 +15,10 @@ WORKDIR /app
 # Copy go mod files first for better caching
 COPY go.mod go.sum* ./
 
-# Download dependencies
-RUN go mod download
-
 # Copy source code
 COPY . .
+
+RUN go build -o /app/main 
 
 # Final stage - minimal runtime image
 FROM alpine:latest
@@ -43,4 +42,4 @@ COPY --from=builder /app/banners ./banners
 EXPOSE 8080
 
 # Run the script
-ENTRYPOINT ["sh","/app/entry_point.sh"]
+ENTRYPOINT ["/app/main"]
