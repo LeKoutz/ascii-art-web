@@ -5,8 +5,8 @@
 
 set -e
 
-IMAGE_NAME="ascii-art-web"
-CONTAINER_NAME="ascii-art-web-container"
+IMAGE_NAME="aaw-image"
+CONTAINER_NAME="aaw-container"
 TAG="latest"
 
 # Colors for output
@@ -19,7 +19,7 @@ print_usage() {
     echo "Usage: $0 [build|run|stop|clean|logs|shell]"
     echo ""
     echo "Commands:"
-    echo "  build  - Build the Docker image"
+    echo "  build  - Build the Docker image" 
     echo "  run    - Run the container"
     echo "  stop   - Stop the container"
     echo "  clean  - Remove container and image"

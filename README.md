@@ -9,7 +9,7 @@ A web application that converts text into ASCII art using different banner style
 go run main.go
 ```
 
-### Docker
+## Docker
 
 #### Quick Start
 ```bash
@@ -18,20 +18,27 @@ go run main.go
 ./docker-build.sh run
 ```
 
-#### Manual Docker Commands
+#### Audit commands
 ```bash
 # Build the image
-docker build -t ascii-art-web .
+docker image build -t aaw-image .
+
+# View images
+docker images
 
 # Run the container
-docker run -d -p 8080:8080 --name ascii-art-web-container ascii-art-web
+docker container run -p 8081:8080 --detach --name aaw-container aaw-image
 
-# View logs
-docker logs ascii-art-web-container
+# View containers
+docker ps -a
 
-# Stop and remove
-docker stop ascii-art-web-container
-docker rm ascii-art-web-container
+# Start an interactive shell section inside container
+docker exec -it aaw-container /bin/sh
+
+ls -l
+
+# Inspect metadata
+docker inspect aaw-image
 ```
 
 ## Project Structure
@@ -51,11 +58,14 @@ ascii-art-web/
 ├── templates/
 │   ├── index.html       # Main page template
 │   └── error.html       # Error page template
+├── docker-build.sh
+├── Dockerfile
 └── banners/
     ├── standard.txt     # ASCII art fonts
     ├── shadow.txt
     ├── thinkertoy.txt
     └── zigzag.txt
+
 ```
 
 ## Error Status Testing
@@ -98,26 +108,26 @@ The `docker-build.sh` script provides easy Docker management:
 
 ```bash
 # Build image
-docker build -t ascii-art-web .
+docker build -t aaw .
 
 # Run container (detached mode)
-docker run -d -p 8080:8080 --name ascii-art-web-container ascii-art-web
+docker run -d -p 8081:8080 --name aaw-container aaw
 
 # Run container (interactive mode to see logs)
-docker run -p 8080:8080 --name ascii-art-web-container ascii-art-web
+docker run -p 8081:8080 --name aaw-container aaw
 
 # View logs
-docker logs ascii-art-web-container
-docker logs -f ascii-art-web-container  # Follow logs
+docker logs aaw-container
+docker logs -f aaw-container  # Follow logs
 
 # Stop container
-docker stop ascii-art-web-container
+docker stop aaw-container
 
 # Remove container
-docker rm ascii-art-web-container
+docker rm aaw-container
 
 # Remove image
-docker rmi ascii-art-web
+docker rmi aaw
 
 # Clean up unused Docker objects
 docker system prune -f
@@ -130,13 +140,13 @@ docker system prune -f
 # Find what's using port 8080
 netstat -tulpn | grep 8080
 # Or use different port
-docker run -p 8081:8080 --name ascii-art-web-container ascii-art-web
+docker run -p 8081:8080 --name aaw-container aaw
 ```
 
 **Container name conflict:**
 ```bash
 # Remove existing container
-docker rm -f asci
+docker rm -f container
 ```
 
 # **Contributors:**
