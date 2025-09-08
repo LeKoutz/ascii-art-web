@@ -1,0 +1,56 @@
+/* Main styles for ASCII Art application */
+
+/* Base styles for the page */
+body {
+    background: #000000;
+    color: #ffffff;
+    font-family: monospace;
+    margin: 16px;
+}
+
+/* Main heading */
+h1 {
+    color: #9969FF;
+}
+
+/* Form labels */
+label {
+    margin: 8px 8px 4px 0;
+}
+
+/* Text input area */
+textarea {
+    width: 100%;
+    height: 120px;
+}
+
+/* Submit button */
+button {
+    background: #007BFF;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+}
+
+/* Result display area */
+pre.result {
+    background: #111111;
+    color: #FF3355;
+    padding: 10px;
+    white-space: pre;
+    overflow: auto;
+}
+
+/* Layout for banner selection row */
+.row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+/* Center alignment for generate button */
+.center {
+    text-align: center;
+    margin-top: 8px;
+}
