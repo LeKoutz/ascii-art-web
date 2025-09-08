@@ -26,6 +26,9 @@ func main() {
 	http.HandleFunc("/", asciiHandler.HandleHome)              // GET: Home page with form
 	http.HandleFunc("/ascii-art", asciiHandler.HandleAsciiArt) // POST: Process ASCII art generation
 
+	// Add static file serving
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+
 	// Start the web server
 	port := ":8080"
 	log.Printf("Server starting on http://localhost%s", port)
