@@ -4,14 +4,27 @@
 <head>
     <meta charset="utf-8">
     <title>ASCII Art</title>
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 
 <body>
-    <h1>ASCII Art</h1>
+    <h1>ASCII-Art Generator</h1>
 
     <form method="POST" action="/ascii-art">
         <label for="text">Text</label>
-        <textarea id="text" name="text" maxlength="500">{{.InputText}}</textarea>
+        <textarea 
+            id="text" 
+            name="text" 
+            pattern="[ -~]"
+            maxlength="500"
+            placeholder="Enter text for ASCII art (max 500 characters)">{{.InputText}}</textarea>
+
+            <div class="validation-info valid">
+                    ✓ Perfect! All characters are valid ASCII (32-126)
+                </div>
+            <div class="validation-info invalid">
+                    ✗ Invalid characters detected! Only ASCII characters 32-126 are allowed
+                </div>
 
         <div class="row">
             <label for="banner">Banner</label>
@@ -31,7 +44,7 @@
     </form>
 
     {{if .AsciiArt}}
-    <h2 style="color:#FF3355;">Result</h2>
+    <h2>Result</h2>
     <pre class="result">{{.AsciiArt}}</pre>
     {{end}}
 </body>
