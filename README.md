@@ -39,6 +39,9 @@ ls -l
 
 # Inspect metadata
 docker inspect aaw-image
+
+# JQ specific view
+docker inspect aaw-image | jq '.Config.Labels'
 ```
 
 ## Project Structure
