@@ -19,13 +19,6 @@
             maxlength="500"
             placeholder="Enter text for ASCII art (max 500 characters)">{{.InputText}}</textarea>
 
-            <div class="validation-info valid">
-                    ✓ Perfect! All characters are valid ASCII (32-126)
-                </div>
-            <div class="validation-info invalid">
-                    ✗ Invalid characters detected! Only ASCII characters 32-126 are allowed
-                </div>
-
         <div class="row">
             <label for="banner">Banner</label>
             <select id="banner" name="banner">
@@ -44,7 +37,6 @@
     </form>
 
     {{if .AsciiArt}}
-    <h2>Result</h2>
     <pre class="result">{{.AsciiArt}}</pre>
     {{end}}
 </body>
