@@ -25,6 +25,7 @@ func main() {
 	// Register HTTP routes
 	http.HandleFunc("/", asciiHandler.HandleHome)              // GET: Home page with form
 	http.HandleFunc("/ascii-art", asciiHandler.HandleAsciiArt) // POST: Process ASCII art generation
+	http.HandleFunc("/static/", asciiHandler.HandleResources)
 
 	// Start the web server
 	port := ":8080"

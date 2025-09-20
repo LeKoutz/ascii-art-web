@@ -4,32 +4,19 @@
 <head>
     <meta charset="utf-8">
     <title>Error</title>
-    <style>
-        body {
-            background: #000000;
-            color: #ffffff;
-            font-family: monospace;
-            margin: 16px;
-        }
-
-        h1 {
-            color: #FF3355;
-        }
-
-        a {
-            background: #007BFF;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 6px 10px;
-            display: inline-block;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 
 <body>
     <h1>Error {{.StatusCode}}</h1>
-    <p>{{.Message}}</p>
-    <p><a href="/">Go back</a></p>
+    <div class="center">
+        <h2>{{.Message}}</h2>
+    </div>
+
+    <div class="center">
+        <p><a href="/">
+            <button type="button">Go back</button></a></p>
+    </div>
 </body>
 
 </html>
