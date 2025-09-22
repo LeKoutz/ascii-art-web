@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"path/filepath"
+	"strings"
 
 	"ascii-art-web/services"
 )
@@ -133,6 +135,15 @@ func (a *AsciiHandler) HandleAsciiArt(w http.ResponseWriter, r *http.Request) {
 		a.HandleErrors(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 		return
 	}
+}
+
+func (a *AsciiHandler) HandleResources(w http.ResponseWriter, r *http.Request) {
+	if strings.HasSuffix(r.URL.Path, "/") {
+		a.HandleErrors(w, http.StatusNotFound, http.StatusText(http.StatusNotFound))
+		return
+	}
+	filePath := strings.TrimPrefix(r.URL.Path, "/static")
+	http.ServeFile(w, r, filepath.Join("static", filePath))
 }
 
 // HandleErrors renders error pages for various HTTP error conditions.
