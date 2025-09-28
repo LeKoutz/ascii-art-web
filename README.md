@@ -15,12 +15,12 @@ You can run the application inside a Docker container
 
 **Build the Docker image**
 ```bash
-docker build -t ascii-art-web .
+docker image build -f Dockerfile -t ascii-art-web-docker .
 ```
 
 **Run the container**
 ```bash
-docker run -p 8080:8080 ascii-art-web
+docker container run -p 8080:8080 --detach --name dockerize ascii-art-web-docker
 ```
 Now the server will be available at:
 http://localhost:8080
@@ -32,6 +32,24 @@ Alternatively, you can use the included script to build and run in one step
 ./dockerize.sh
 ```
 
+**Check the file system**
+
+```
+docker exec -it dockerize sh
+
+ls -l
+```
+
+**Inspect metadata**
+```
+docker inspect ascii-art-web-docker
+```
+For custom labels
+```
+sudo apt install jq
+
+docker inspect ascii-art-web-docker | jq '.[0].Config.Labels'
+```
 ## Project Structure
 
 ```bash
