@@ -1,45 +1,37 @@
 # Build stage
-FROM golang:1.24.6-alpine AS builder
+FROM golang:1.21-alpine AS builder
 
-# Add metadata labels
-LABEL maintainer="ASCII Art Web Team"
-LABEL description="ASCII Art Web Application"
-LABEL version="1.0.0"
-LABEL org.opencontainers.image.source="https://platform.zone01.gr/git/cktistak/ascii-art-web/src/branch/dockerize/"
-LABEL org.opencontainers.image.description="A web application that converts text into ASCII art"
-LABEL org.opencontainers.image.licenses="MIT"
+LABEL stage=build
 
-# Set working directory
-WORKDIR /app
+WORKDIR /build
 
-# Copy go mod files first for better caching
-COPY go.mod go.sum* ./
-
-# Copy source code
 COPY . .
 
-RUN go build -o /app/main 
+RUN CGO_ENABLED=0 GOOS=linux go build -o server .
 
-# Final stage - minimal runtime image
+# Runtime stage
 FROM alpine:latest
 
-# Add metadata to final image
-LABEL maintainer="ASCII Art Web Team"
-LABEL description="ASCII Art Web Application - Runtime"
-LABEL version="1.0.0"
+LABEL org.opencontainers.image.title="ascii-art-web"
+LABEL org.opencontainers.image.description="Web application for generating ASCII art"
+LABEL org.opencontainers.image.version="1.0.0"
+LABEL org.opencontainers.image.authors="Zone01 students: gkoutzos, cktistak, ikountour"
+LABEL stage=runtime
 
-# Set working directory
 WORKDIR /app
 
-# Copy binary from builder stage
-COPY --from=builder /app/main .
+COPY --from=builder /build/server .
+COPY --from=builder /build/templates ./templates
+COPY --from=builder /build/banners ./banners
 
-# Copy static files (templates and banners)
-COPY --from=builder /app/templates ./templates
-COPY --from=builder /app/banners ./banners
+RUN apk --no-cache add curl
 
-# Expose port
+RUN adduser -D appuser && chown -R appuser /app
+USER appuser
+
 EXPOSE 8080
 
-# Run the script
-ENTRYPOINT ["/app/main"]
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/ || exit 1
+
+CMD ["./server"]
