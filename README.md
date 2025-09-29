@@ -68,6 +68,10 @@ docker inspect ascii-art-web-docker | jq '.[0].Config.Labels'
 │   └── handlers_test.go    # Handler unit tests
 ├── main.go                 # Entry point
 ├── main_test.go            # Integration and main package tests
+│── static
+│    ├── css
+│    │   ├── style.css          # Fonts & text styles
+│    └── ChatGPT Image          # Background png
 ├── services
 │   ├── ascii-art.go
 │   └── ascii-art_test.go
