@@ -1,0 +1,3 @@
+[submodule "stylize"]
+	path = stylize
+	url = https://platform.zone01.gr/git/cktistak/ascii-art-web-stylize.git
