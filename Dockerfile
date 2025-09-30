@@ -23,6 +23,7 @@ WORKDIR /app
 COPY --from=builder /build/server .
 COPY --from=builder /build/templates ./templates
 COPY --from=builder /build/banners ./banners
+COPY --from=builder /build/static ./static
 
 RUN apk --no-cache add curl
 
