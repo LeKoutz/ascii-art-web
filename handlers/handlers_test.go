@@ -32,6 +32,7 @@ func TestNewAsciiHandler(t *testing.T) {
 
 	if handler == nil {
 		t.Error("NewAsciiHandler should return a non-nil handler")
+		return
 	}
 
 	if handler.service != service {

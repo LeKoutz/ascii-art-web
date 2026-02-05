@@ -2,6 +2,14 @@
 
 A web application that converts text into ASCII art using different banner styles. Users can input text and select from various fonts to generate stylized ASCII art output.
 
+## Features
+
+- **ASCII Art Generation**: Convert text into ASCII art using multiple banner styles
+- **Export Functionality**: Download generated ASCII art as a `.txt`, `.md` or `.http` file with proper formatting
+- **Multiple Fonts**: Choose from various banner styles (standard, shadow, thinkertoy, zigzag)
+- **Web Interface**: Clean, user-friendly interface with real-time generation
+- **Dockerized**: Run the application inside a container
+
 ## How to Run
 
 ```bash

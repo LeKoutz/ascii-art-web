@@ -26,6 +26,7 @@ func main() {
 	http.HandleFunc("/", asciiHandler.HandleHome)              // GET: Home page with form
 	http.HandleFunc("/ascii-art", asciiHandler.HandleAsciiArt) // POST: Process ASCII art generation
 	http.HandleFunc("/static/", asciiHandler.HandleResources)
+	http.HandleFunc("/export", asciiHandler.HandleExport) // POST: Export/download generated ascii as a file
 
 	// Start the web server
 	port := ":8080"

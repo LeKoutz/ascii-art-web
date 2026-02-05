@@ -231,7 +231,18 @@ pre.result {
     animation: slideIn 0.6s ease-out;
 }
 
+.export-form {
+    animation: slideIn 0.6s ease-out;
+    animation-delay: 0.2s;
+    animation-fill-mode: both;
+}
+
+
 pre.result {
     animation-delay: 0.2s;
     animation-fill-mode: both;
+}
+
+button[type="submit"] {
+    margin: 10px;
 }

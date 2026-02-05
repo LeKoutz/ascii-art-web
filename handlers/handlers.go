@@ -137,7 +137,73 @@ func (a *AsciiHandler) HandleAsciiArt(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// HandleExport exports ASCII art in different formats.
+func (a *AsciiHandler) HandleExport(w http.ResponseWriter, r *http.Request) {
+	// Only allow POST requests
+	if r.Method != http.MethodPost {
+		a.HandleErrors(w, http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed))
+		return
+	}
+
+	if err := r.ParseForm(); err != nil {
+		a.HandleErrors(w, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+		return
+	}
+
+	asciiArt := r.FormValue("ascii-art")
+	if asciiArt == "" {
+		a.HandleErrors(w, http.StatusBadRequest, "No ASCII art to export")
+		return
+	}
+
+	format := r.FormValue("format")
+	if format == "" {
+		format = "txt"
+	}
+
+	var content []byte
+	var contentType, filename string
+
+	switch format {
+	case "txt":
+		content = []byte(asciiArt)
+		contentType = "text/plain"
+		filename = "ascii-art.txt"
+	case "md":
+		mdContent := fmt.Sprintf("```\n%s\n```\n", asciiArt)
+		content = []byte(mdContent)
+		contentType = "text/markdown"
+		filename = "ascii-art.md"
+	case "html":
+		htmlContent := fmt.Sprintf(`<!DOCTYPE html>
+<html>
+<head>
+    <title>ASCII Art</title>
+</head>
+<body>
+    <pre>%s</pre>
+</body>
+</html>`, template.HTMLEscapeString(asciiArt))
+		content = []byte(htmlContent)
+		contentType = "text/html"
+		filename = "ascii-art.html"
+	default:
+		a.HandleErrors(w, http.StatusBadRequest, "Invalid format")
+		return
+	}
+
+	w.Header().Set("Content-Type", contentType)
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
+	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(content)))
+	w.Write(content)
+}
+
+// HandleResources serves static files.
 func (a *AsciiHandler) HandleResources(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		a.HandleErrors(w, http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed))
+		return
+	}
 	if strings.HasSuffix(r.URL.Path, "/") {
 		a.HandleErrors(w, http.StatusNotFound, http.StatusText(http.StatusNotFound))
 		return

@@ -32,9 +32,20 @@
                 {{ end }}
             </select>
         </div>
-        
+
         <div class="center">
             <button type="submit">Generate</button>
+            <div class="export-form">
+                {{if .AsciiArt}}
+                <input type="hidden" name="ascii-art" value="{{.AsciiArt}}">
+                <select name="format">
+                    <option value="txt">Text (.txt)</option>
+                    <option value="md">Markdown (.md)</option>
+                    <option value="html">HTML (.html)</option>
+                </select>
+                <button type="submit" formaction="/export">Download</button>
+                {{end}}
+            </div>
         </div>
     </form>
 
