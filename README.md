@@ -10,28 +10,74 @@ go run main.go
 
 The server will start on `http://localhost:8080`
 
-## Project Structure
+## Docker
+You can run the application inside a Docker container
+
+**Build the Docker image**
+```bash
+docker image build -f Dockerfile -t ascii-art-web-docker .
+```
+
+**Run the container**
+```bash
+docker container run -p 8080:8080 --detach --name dockerize ascii-art-web-docker
+```
+Now the server will be available at:
+http://localhost:8080
+
+**Using the provided script**
+
+Alternatively, you can use the included script to build and run in one step
+```bash
+./dockerize.sh
+```
+
+**Check the file system**
 
 ```
-ascii-art-web/
-├── main.go              # Entry point
-├── main_test.go         # Integration and main package tests
-├── go.mod               # Go module definition
-├── LICENSE              # MIT License
-├── handlers/
-│   ├── handlers.go      # HTTP request handlers
-│   └── handlers_test.go # Handler unit tests
-├── services/
-│   ├── ascii-art.go     # ASCII art generation logic
-│   └── ascii-art_test.go # Service unit tests
-├── templates/
-│   ├── index.html       # Main page template
-│   └── error.html       # Error page template
-└── banners/
-    ├── standard.txt     # ASCII art fonts
-    ├── shadow.txt
-    ├── thinkertoy.txt
-    └── zigzag.txt
+docker exec -it dockerize sh
+
+ls -l
+```
+
+**Inspect metadata**
+```
+docker inspect ascii-art-web-docker
+```
+For custom labels
+```
+sudo apt install jq
+
+docker inspect ascii-art-web-docker | jq '.[0].Config.Labels'
+```
+## Project Structure
+
+```bash
+├── Dockerfile              # Dockerfile to create image and start container
+├── LICENSE                 # MIT License
+├── README.md
+├── banners                 # ASCII art fonts
+│   ├── shadow.txt
+│   ├── standard.txt
+│   ├── thinkertoy.txt
+│   └── zigzag.txt
+├── dockerize.sh            # Automated script to create container
+├── go.mod                  # Go module definition
+├── handlers
+│   ├── handlers.go         # HTTP request handlers
+│   └── handlers_test.go    # Handler unit tests
+├── main.go                 # Entry point
+├── main_test.go            # Integration and main package tests
+│── static
+│    ├── css
+│    │   ├── style.css          # Fonts & text styles
+│    └── ChatGPT Image          # Background png
+├── services
+│   ├── ascii-art.go
+│   └── ascii-art_test.go
+└── templates
+    ├── error.html          # Error page template
+    └── index.html          # Main page template
 ```
 
 ## Error Status Testing
